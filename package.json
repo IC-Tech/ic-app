@@ -1,0 +1,22 @@
+{
+  "name": "ic-app",
+  "version": "1.0.0",
+  "description": "Simple client-render framework",
+  "main": "src/ic-app.js",
+  "scripts": {},
+  "author": "Imesh Chamara <imesh1chamara@gmail.com> (https://ic-tech.now.sh/)",
+  "license": "MIT",
+  "devDependencies": {},
+  "dependencies": {},
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IC-Tech/ic-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/IC-Tech/ic-app/issues"
+  },
+  "homepage": "https://github.com/IC-Tech/ic-app#readme"
+}
