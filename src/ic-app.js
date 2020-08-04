@@ -1,12 +1,3 @@
-/**
- * Imesh Chamara (https://github.com/IC-Tech)
- *
- * @link      https://github.com/IC-Tech/icApp
- * @copyright Copyright © 2019-2020, Imesh Chamara. All rights reserved.
- * @license   Copyrights licensed under the MIT License.
- *
- */
-
 const XHR = (url, call, op = {}, data = null) => {
 	op = op || {}
 	var xhr = new XMLHttpRequest()
@@ -106,6 +97,7 @@ const _elm = a => {
 		_fn.b(a.d.s, a.t)
 	}
 	if(a.d.at) _fn.c(a.d.at).forEach(b => _fn.a(b[1]) ? (a.e.ga(b[0]) != b[1].toString() ? a.e.sa(...b) : 0) : 0)
+	if(a.d.d) _fn.c(a.d.d).forEach(b => a.d.d[b].toString() != a.e.d[b] ? [a.e.d[b] = a.d.d[b].toString()] : 0)
 	if(a.d.cl) {
 		a.t = []
 		_fn.d(a.d.cl).forEach(b => b.toString().split(/ /g).forEach(b => a.t.push(b)))
@@ -146,14 +138,4 @@ class icAppRender {
 	}
 }
 
-window.ic = window.ic || (() => {
-	class ic {}
-	return ic
-})()
-window.ic.XHR = XHR
-window.ic.xhr = xhr
-window.ic.icApp = icApp
-window.ic.pram = pram
-window.ic.IAR = icAppRender
-export default window.ic
 export { XHR, xhr, icApp, pram, icAppRender as IAR }

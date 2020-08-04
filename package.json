@@ -1,12 +1,24 @@
 {
   "name": "ic-app",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Simple client-render framework",
-  "main": "src/ic-app.js",
-  "scripts": {},
+  "main": "build/ic-app.min.js",
+  "scripts": {
+    "build": "rollup -c"
+  },
   "author": "Imesh Chamara <imesh1chamara@gmail.com> (https://ic-tech.now.sh/)",
   "license": "MIT",
-  "devDependencies": {},
+  "devDependencies": {
+    "@babel/core": "^7.11.0",
+    "@babel/preset-env": "^7.11.0",
+    "rollup": "^2.23.0",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-cleanup": "^3.1.1",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^6.1.0",
+    "rollup-plugin-uglify": "^6.0.4"
+  },
   "dependencies": {},
   "directories": {
     "test": "test"
@@ -18,5 +30,5 @@
   "bugs": {
     "url": "https://github.com/IC-Tech/ic-app/issues"
   },
-  "homepage": "https://github.com/IC-Tech/ic-app#readme"
+  "homepage": "https://github.com/IC-Tech/ic-app"
 }
