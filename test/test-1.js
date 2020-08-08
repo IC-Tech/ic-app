@@ -1,5 +1,5 @@
 //import { icApp } from '../src/ic-app.js';
-import { icApp } from '../build/bundle.min.js';
+import { icApp } from '../build/ic-app.min.js';
 
 var body = new icApp('body')
 body.chr()

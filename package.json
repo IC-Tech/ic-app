@@ -1,6 +1,6 @@
 {
   "name": "ic-app",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Simple client-render framework",
   "main": "build/ic-app.min.js",
   "scripts": {

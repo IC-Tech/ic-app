@@ -429,7 +429,7 @@ var _elm = function _elm(a) {
     return _fn.a(b[1]) ? a.e.ga(b[0]) != b[1].toString() ? (_a$e = a.e).sa.apply(_a$e, _toConsumableArray(b)) : 0 : 0;
   });
   if (a.d.d) _fn.c(a.d.d).forEach(function (b) {
-    return a.d.d[b].toString() != a.e.d[b] ? [a.e.d[b] = a.d.d[b].toString()] : 0;
+    return b[1].toString() != a.e.d[b[0]] ? [a.e.d[b[0]] = b[1].toString()] : 0;
   });
 
   if (a.d.cl) {

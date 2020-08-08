@@ -1,5 +1,5 @@
 //import { IAR } from '../src/ic-app.js';
-import { IAR } from '../build/bundle.min.js';
+import { IAR } from '../build/ic-app.min.js';
 
 class page extends IAR {
 	didMount() {

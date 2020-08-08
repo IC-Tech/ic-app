@@ -97,7 +97,7 @@ const _elm = a => {
 		_fn.b(a.d.s, a.t)
 	}
 	if(a.d.at) _fn.c(a.d.at).forEach(b => _fn.a(b[1]) ? (a.e.ga(b[0]) != b[1].toString() ? a.e.sa(...b) : 0) : 0)
-	if(a.d.d) _fn.c(a.d.d).forEach(b => a.d.d[b].toString() != a.e.d[b] ? [a.e.d[b] = a.d.d[b].toString()] : 0)
+	if(a.d.d) _fn.c(a.d.d).forEach(b => b[1].toString() != a.e.d[b[0]] ? [a.e.d[b[0]] = b[1].toString()] : 0)
 	if(a.d.cl) {
 		a.t = []
 		_fn.d(a.d.cl).forEach(b => b.toString().split(/ /g).forEach(b => a.t.push(b)))
