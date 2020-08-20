@@ -1,5 +1,5 @@
 /*!
- * ic-app v1.2.0
+ * ic-app v1.2.1
  * https://github.com/IC-Tech/ic-app
  * Copyright © 2020, Imesh Chamara. All rights reserved.
  * Released under the MIT License
