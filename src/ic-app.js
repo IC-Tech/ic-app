@@ -59,6 +59,7 @@ class icApp {
 	get html() { return this.v.innerHTML }
 	set html(v) { this.v.innerHTML = v }
 	ga(n) { return this.v.getAttribute(n) }
+	ra(n,v) { this.v.removeAttribute(n); return this }
 	sa(n,v) { this.v.setAttribute(n,v); return this }
 	ae(n,f) { this.v.addEventListener(n,f); return this }
 	get p() { return new icApp(this.v.parentElement) }
@@ -96,7 +97,7 @@ const _elm = a => {
 		//_fn.b(a.e.st, b => { try{ if(!_fn.a(a.d.s[b])) {delete a.e.st[b]} else c(b) } catch(e) {}})
 		_fn.b(a.d.s, a.t)
 	}
-	if(a.d.at) _fn.c(a.d.at).forEach(b => _fn.a(b[1]) ? (a.e.ga(b[0]) != b[1].toString() ? a.e.sa(...b) : 0) : 0)
+	if(a.d.at) _fn.c(a.d.at).forEach(b => _fn.a(b[1]) ? (a.e.ga(b[0]) != b[1].toString() ? a.e.sa(...b) : 0) : (b[1] == undefined ? a.e.ra(b[0]) : 0))
 	if(a.d.d) _fn.c(a.d.d).forEach(b => b[1].toString() != a.e.d[b[0]] ? [a.e.d[b[0]] = b[1].toString()] : 0)
 	if(a.d.cl) {
 		a.t = []

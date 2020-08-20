@@ -1,5 +1,5 @@
 /*!
- * ic-app v1.1.0
+ * ic-app v1.2.0
  * https://github.com/IC-Tech/ic-app
  * Copyright © 2020, Imesh Chamara. All rights reserved.
  * Released under the MIT License
@@ -225,6 +225,12 @@ var icApp = /*#__PURE__*/function () {
       return this.v.getAttribute(n);
     }
   }, {
+    key: "ra",
+    value: function ra(n, v) {
+      this.v.removeAttribute(n);
+      return this;
+    }
+  }, {
     key: "sa",
     value: function sa(n, v) {
       this.v.setAttribute(n, v);
@@ -426,7 +432,7 @@ var _elm = function _elm(a) {
   if (a.d.at) _fn.c(a.d.at).forEach(function (b) {
     var _a$e;
 
-    return _fn.a(b[1]) ? a.e.ga(b[0]) != b[1].toString() ? (_a$e = a.e).sa.apply(_a$e, _toConsumableArray(b)) : 0 : 0;
+    return _fn.a(b[1]) ? a.e.ga(b[0]) != b[1].toString() ? (_a$e = a.e).sa.apply(_a$e, _toConsumableArray(b)) : 0 : b[1] == undefined ? a.e.ra(b[0]) : 0;
   });
   if (a.d.d) _fn.c(a.d.d).forEach(function (b) {
     return b[1].toString() != a.e.d[b[0]] ? [a.e.d[b[0]] = b[1].toString()] : 0;
