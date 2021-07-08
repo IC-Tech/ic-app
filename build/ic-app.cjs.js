@@ -4,6 +4,8 @@
  * Copyright (c) 2021, Imesh Chamara. All rights reserved.
  * Released under the MIT License
  */
+'use strict';
+
 function _typeof(obj) {
   "@babel/helpers - typeof";
 
@@ -548,6 +550,3 @@ i.icApp = icApp;
 i.pram = pram;
 i.IAR = icAppRender;
 window.ic = i;
-
-export default i;
-export { icAppRender as IAR, XHR, icApp, pram, xhr };

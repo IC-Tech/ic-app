@@ -20,9 +20,17 @@ const XHR = (url, call, op = {}, data = null) => {
 const xhr = (url, op = {}, data = null) => new Promise(_ => XHR(url, _, op, data))
 
 const pram = a => {
-	a = a || location.search
-	var b = {}, d, c = /(?:(?:\?|&)?([^=&?#]*)=([^=&?#]*))/g
-	while((d = c.exec(a))) b[d[1]] = decodeURIComponent(d[2])
+	if(typeof a == 'object') return Object.keys(a).map(b => b + '=' + encodeURIComponent(a[b].toString())).join('&')
+	var b = {}
+	var c = /(?:(?:\?|&)?([^=&?#]*)=([^=&?#]*))/g
+	var d
+	while((d = c.exec(a))) {
+		if(!b[d[1]]) b[d[1]] = decodeURIComponent(d[2])
+		else {
+			if(!(b[d[1]] instanceof Array)) b[d[1]] = [b[d[1]]]
+			b[d[1]].push(decodeURIComponent(d[2]))
+		}
+	}
 	return b
 }
 
@@ -38,7 +46,7 @@ class icApp {
 		this.v = cr ? icApp.ce(v, typeof cr == 'string' || typeof cr == 'object' ? cr : {}) : typeof v == 'string' ? icApp.qs(v) : v;
 		return v == null || v == undefined ? v : this
 	}
-	get c() { return Array.from(this.v.classList).map(e => new icApp(e)) }
+	get c() { return Array.from(this.ch()).map(e => new icApp(e)) }
 	get cl() { return this.v.classList }
 	get ch() { return this.v.children }
 	get chn() { return this.v.childNodes }
@@ -81,7 +89,6 @@ class icApp {
 	static ds (a) { return new icApp(Object.keys(a).map(b=> `[data-${b}="${a[b]}"]`).join('')) }
 }
 
-const IC_DEV = !!((typeof __IC_DEV__ != 'undefined' && __IC_DEV__) || 0)
 const _fn = {
 	a: a => a || typeof a == 'string' || (typeof a == 'number' && a == 0),
 	b: (a,b) => Object.keys(a).forEach(c=>b(c)),
@@ -118,7 +125,6 @@ class icAppRender {
 		this.e = null
 		this.a = false
 		this.pevData = null
-		if(IC_DEV) window.__IC_DEV__[this.constructor.name] = this
 	}
 	update(d) {
 		if(this.data) {
