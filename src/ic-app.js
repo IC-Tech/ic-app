@@ -2,7 +2,7 @@ const XHR = (url, call, op = {}, data = null) => {
 	op = op || {}
 	var xhr = new XMLHttpRequest()
 	xhr.open(op.meth || (data && !op.meth ? 'POST' : 'GET'), url + (op.fresh == 0 ? '' : ((url.indexOf('?') >= 0 ? '&' : '?') + 't=' + new Date().getTime())))
-	Object.keys(op.head || {}).forEach(a => xhr.setRequestHeader(a, op.head[a]))
+	Object.keys(op.head || {}).forEach(a => {xhr.setRequestHeader(a, op.head[a])})
 	xhr.onreadystatechange = () => {
 		if (xhr.readyState == 4 && xhr.status != 0) {
 			if(!xhr.response) return call({success: false, error: {code: 3, message: 'server did not respond'}})
@@ -13,18 +13,16 @@ const XHR = (url, call, op = {}, data = null) => {
 			}
 		}
 	}
-	xhr.onerror = () => call({success: false, error: {code: 1, message: 'network error occurred'}})
-	xhr.ontimeout = () => call({success: false, error: {code: 2, message: 'request timed out'}})
+	xhr.onerror = () => {call({success: false, error: {code: 1, message: 'network error occurred'}})}
+	xhr.ontimeout = () => {call({success: false, error: {code: 2, message: 'request timed out'}})}
 	xhr.send(data)
 }
-const xhr = (url, op = {}, data = null) => new Promise(_ => XHR(url, _, op, data))
+const xhr = (url, op = {}, data = null) => new Promise(_ => {XHR(url, _, op, data)})
 
 const pram = a => {
 	if(typeof a == 'object') return Object.keys(a).map(b => b + '=' + encodeURIComponent(a[b].toString())).join('&')
-	var b = {}
-	var c = /(?:(?:\?|&)?([^=&?#]*)=([^=&?#]*))/g
-	var d
-	while((d = c.exec(a))) {
+	var b = {}, c = /(?:(?:\?|&)?([^=&?#]*)=([^=&?#]*))/g, d
+	while(d = c.exec(a)) {
 		if(!b[d[1]]) b[d[1]] = decodeURIComponent(d[2])
 		else {
 			if(!(b[d[1]] instanceof Array)) b[d[1]] = [b[d[1]]]
@@ -34,31 +32,27 @@ const pram = a => {
 	return b
 }
 
-var _n = {
-	b: (a,b) => {
-		if(b) return a instanceof icApp ? a : new icApp(a)
-		return a instanceof icApp ? a.v : a
-	},
-	c: a => a instanceof Array ? a : [a]
-}
+const _nb = (a,b) => b ? (a instanceof icApp ? a : new icApp(a)) : (a instanceof icApp ? a.v : a),
+_nc = a => a instanceof Array ? a : [a],
+_nd = a => Object.keys(a).map(b=> `[data-${b}="${a[b]}"]`).join('')
 class icApp {
 	constructor(v,cr) {
 		this.v = cr ? icApp.ce(v, typeof cr == 'string' || typeof cr == 'object' ? cr : {}) : typeof v == 'string' ? icApp.qs(v) : v;
 		return v == null || v == undefined ? v : this
 	}
-	get c() { return Array.from(this.ch()).map(e => new icApp(e)) }
+	get c() { return Array.from(this.ch).map(e => new icApp(e)) }
 	get cl() { return this.v.classList }
 	get ch() { return this.v.children }
 	get chn() { return this.v.childNodes }
-	ap(v) { this.v.appendChild(_n.b(v)); return this }
+	ap(v) { this.v.appendChild(_nb(v)); return this }
 	chr(v) {
-		if(v) {_n.c(v).forEach(a => _n.b(a,1).rem())}
+		if(v) {_nc(v).forEach(a => _nb(a,1).rem())}
 		else {while(this.ch.length > 0) this.ch[0].remove()}
 		return this
 	}
-	cla(v) { this.cl.add(..._n.c(v)); return this }
-	clr(v) { this.cl.remove(..._n.c(v)); return this }
-	clc(v) { return !_n.c(v).some(a => !this.cl.contains(a)) }
+	cla(v) { this.cl.add(..._nc(v)); return this }
+	clr(v) { this.cl.remove(..._nc(v)); return this }
+	clc(v) { return !_nc(v).some(a => !this.cl.contains(a)) }
 	get st() { return this.v.style }
 	get d() { return this.v.dataset }
 	set stp(v) { this.st.setProperty(v[0], v[1]) }
@@ -67,7 +61,7 @@ class icApp {
 	get html() { return this.v.innerHTML }
 	set html(v) { this.v.innerHTML = v }
 	ga(n) { return this.v.getAttribute(n) }
-	ra(n,v) { this.v.removeAttribute(n); return this }
+	ra(n) { this.v.removeAttribute(n); return this }
 	sa(n,v) { this.v.setAttribute(n,v); return this }
 	ae(n,f) { this.v.addEventListener(n,f); return this }
 	get p() { return new icApp(this.v.parentElement) }
@@ -82,66 +76,63 @@ class icApp {
 	get nextN() { return new icApp(this.v.nextSibling) }
 
 	static get d() { return document }
-	static qs(v) { return this.d.querySelector(v) }
-	static qsa(v) { return this.d.querySelectorAll(v) }
-	static ce(v,d={}) { var i=0;if([['#cdata-section', 'createCDATASection'],['#comment', 'createComment'],['#document-fragment', 'createDocumentFragment'],['#text', 'createTextNode']].some(a => a[0] == v ? [i = a[1]] : 0)) return this.d[i](d); else return this.d.createElement(v, d) }
-	static cen (n,v) { return this.d.createElementNS(n,v) }
-	static ds (a) { return new icApp(Object.keys(a).map(b=> `[data-${b}="${a[b]}"]`).join('')) }
+	static qs(v,e) { return (e || this.d).querySelector(v) }
+	static qsa(v,e) { return (e || this.d).querySelectorAll(v) }
+	static ce(v,d={}) { var i=0;if([['#cdata-section', 'createCDATASection'],['#comment', 'createComment'],['#document-fragment', 'createDocumentFragment'],['#text', 'createTextNode']].some(a => a[0] == v && [i = a[1]])) return this.d[i](d); else return this.d.createElement(v, d) }
+	static cen(n,v) { return this.d.createElementNS(n,v) }
+	static ds(a) { return new icApp(_nd(a)) }
 }
 
-const _fn = {
-	a: a => a || typeof a == 'string' || (typeof a == 'number' && a == 0),
-	b: (a,b) => Object.keys(a).forEach(c=>b(c)),
-	c: a => a instanceof Array ? a : Object.keys(a).map(b => [b, a[b]]),
-	d: a => a instanceof Array ? a : [a],
-}
+const _Na = a => a || typeof a == 'string' || (typeof a == 'number' && a == 0),
+_Nb = (a,b) => Object.keys(a).forEach(c=>{b(c)}),
+_Nc = a => a instanceof Array ? a : Object.keys(a).map(b => [b, a[b]]),
+_Nd = a => a instanceof Array ? a : [a],
+_Ne = a => a === 0 || a === false
 const _elm = a => {
 	if(typeof a.d == 'string') a.d = {t:'#text', _txt: a.d, nodes: 1, e:{data: a.d}}
 	if(a.cr) a.cr.ap(a.e = new icApp(a.d.t, a.d.t.startsWith('#') ? a.d._txt : {}))
-	if(_fn.a(a.d.t) && a.e.node.toUpperCase() != a.d.t.toUpperCase()) { a.e.p.v.replaceChild((a.t = new icApp(a.d.t, a.d.t.startsWith('#') ? a.d._txt : {})).v, a.e.v); a.e = a.t }
-	if(a.d.s) {
-		a.t = b => a.d.s[b] != a.e.st[b] ? [a.e.st[b] = a.d.s[b]] : 0
-		//_fn.b(a.e.st, b => { try{ if(!_fn.a(a.d.s[b])) {delete a.e.st[b]} else c(b) } catch(e) {}})
-		_fn.b(a.d.s, a.t)
-	}
-	if(a.d.at) _fn.c(a.d.at).forEach(b => _fn.a(b[1]) ? (a.e.ga(b[0]) != b[1].toString() ? a.e.sa(...b) : 0) : (b[1] == undefined ? a.e.ra(b[0]) : 0))
-	if(a.d.d) _fn.c(a.d.d).forEach(b => b[1].toString() != a.e.d[b[0]] ? [a.e.d[b[0]] = b[1].toString()] : 0)
+	if(_Na(a.d.t) && a.e.node.toUpperCase() != a.d.t.toUpperCase()) { a.e.p.v.replaceChild((a.t = new icApp(a.d.t, a.d.t.startsWith('#') ? a.d._txt : {})).v, a.e.v); a.e = a.t }
+	if(a.d.s) _Nb(a.d.s, b => {if(a.d.s[b] != a.e.st[b]) a.e.st[b] = a.d.s[b]})
+	if(a.d.at) _Nc(a.d.at).forEach(b => {b[1] === undefined ? a.e.ra(b[0]) : (_Na(b[1]) ? (a.e.ga(b[0]) != b[1].toString() ? a.e.sa(...b) : 0) : 0)})
+	if(a.d.d) _Nc(a.d.d).forEach(b => {if(b[1].toString() != a.e.d[b[0]]) a.e.d[b[0]] = b[1].toString()})
 	if(a.d.cl) {
 		a.t = []
-		_fn.d(a.d.cl).forEach(b => b.toString().split(/ /g).forEach(b => a.t.push(b)))
+		_Nd(a.d.cl).forEach(b => {b.toString().split(' ').forEach(b => {a.t.push(b)})})
 		if(!a.e.clc(a.t)) a.e.cla(a.t)
-		a.e.cl.forEach(b => a.t.indexOf(b) >= 0 ? 0 : a.e.clr(b))
+		a.e.cl.forEach(b => {a.t.indexOf(b) == -1 && a.e.clr(b)})
 	}
-	if(_fn.a(a.d.html)) {a.e.html != a.d.html ? a.e.html = a.d.html : 0}
-	if(_fn.a(a.d.txt)) {a.e.txt != a.d.txt ? a.e.txt = a.d.txt : 0}
-	if(a.d.e) _fn.c(a.d.e).forEach(b => a.e.v[b[0]] != b[1] ? a.e.v[b[0]] = b[1] : 0)
-	if(!a.d.noupdate && a.d.ch) { a.t = a.e[a.d.nodes ? 'chn' : 'ch']; a.d.ch.forEach((b,c) => !_fn.a(b) ? 0 : _elm(a.t[c] ? {e: new icApp(a.t[c]), d: b} : {cr: a.e, d: b})); while(a.d.ch.length < a.t.length) a.t[a.t.length - 1].remove() }
-	if(_fn.a(a.d.id)) a.e.id = a.d.id
+	if(_Na(a.d.html) && a.e.html != a.d.html) a.e.html = a.d.html
+	if(_Na(a.d.txt) && a.e.txt != a.d.txt) a.e.txt = a.d.txt
+	if(a.d.e) _Nc(a.d.e).forEach(b => {if(a.e.v[b[0]] != b[1]) a.e.v[b[0]] = b[1]})
+	if(!a.d.noupdate && a.d.ch) { a.t = a.e[a.d.nodes || a.e.chn.length != a.e.ch.length ? 'chn' : 'ch']; a.d.ch.forEach((b,c) => {if(_Na(b)) _elm(a.t[c] ? {e: new icApp(a.t[c]), d: b} : {cr: a.e, d: b})}); while(a.d.ch.length < a.t.length) a.t[a.t.length - 1].remove() }
+	if(_Na(a.d.id)) a.e.id = a.d.id
 	return a
 }
 class icAppRender {
 	constructor() {
 		this._elm = _elm.bind(this)
 		this.e = null
-		this.a = false
+		this._a = false
 		this.pevData = null
 	}
 	update(d) {
 		if(this.data) {
-			if(this.willUpdate) this.pevData = Object.assign({}, this.data)
+			this.pevData = Object.assign({}, this.data)
 			Object.assign(this.data, d)
 		}
-		if(this.render && (typeof this.willUpdate == 'undefined' || !this.willUpdate())) {
+		if(this.render && !(this.willUpdate && _Ne(this.willUpdate()))) {
 			var b = this.render()
 			this._elm({e: this.e, d: {ch: typeof b.length == 'undefined' ? [b] : b}})
-			if(this.a && this.didUpdate) this.didUpdate()
-			if(!this.a) this.a = true
+			if(!this._a) {
+				this._a = true
+				if(this.didMount) this.didMount()
+			}
+			else if(this.didUpdate) this.didUpdate()
 		}
 	}
 	mount(e) {
 		this.e = new icApp(e)
 		this.update()
-		if(this.didMount) this.didMount()
 	}
 }
 

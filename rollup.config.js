@@ -23,8 +23,8 @@ export default [
 	{
 		input: './src/main-cjs.js',
 		output: [
-			{ banner, format: 'cjs', file: './build/ic-app.cjs.js' },
-			{ banner, format: 'cjs', file: './build/ic-app.cjs.min.js', plugins: [terser()] }
+			{ banner, format: 'iife', file: './build/ic-app.cjs.js' },
+			{ banner, format: 'iife', file: './build/ic-app.cjs.min.js', plugins: [terser()] }
 		],
 		plugins: [cleanup(), babel({exclude: 'node_modules/**'}), resolve(), commonjs()]
 	}
