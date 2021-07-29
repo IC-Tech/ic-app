@@ -78,90 +78,69 @@
     throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
   }
 
-  var XHR = function XHR(url, call) {
-    var op = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-    var data = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
-    op = op || {};
+  var _xE = function _xE(a) {
+    return {
+      success: false,
+      error: {
+        code: a,
+        message: [, 'network error occurred', 'request timed out', 'server did not respond', 'response could not parse'][a]
+      }
+    };
+  },
+      XHR = function XHR(url, call, op, data) {
     var xhr = new XMLHttpRequest();
-    xhr.open(op.meth || (data && !op.meth ? 'POST' : 'GET'), url + (op.fresh == 0 ? '' : (url.indexOf('?') >= 0 ? '&' : '?') + 't=' + new Date().getTime()));
+    xhr.open((op = op || {}).meth || (data && !op.meth ? 'POST' : 'GET'), url + (op.fresh == 0 ? '' : (url.indexOf('?') >= 0 ? '&' : '?') + 't=' + new Date().getTime()));
     Object.keys(op.head || {}).forEach(function (a) {
       xhr.setRequestHeader(a, op.head[a]);
     });
 
     xhr.onreadystatechange = function () {
       if (xhr.readyState == 4 && xhr.status != 0) {
-        if (!xhr.response) return call({
-          success: false,
-          error: {
-            code: 3,
-            message: 'server did not respond'
-          }
-        });
+        if (!xhr.response) return call(_xE(3));
 
         try {
           call(op.raw ? xhr.response : JSON.parse(xhr.response));
         } catch (e) {
-          call({
-            success: false,
-            error: {
-              code: 4,
-              message: 'response could not parse'
-            }
-          });
+          call(_xE(4));
         }
       }
     };
 
     xhr.onerror = function () {
-      call({
-        success: false,
-        error: {
-          code: 1,
-          message: 'network error occurred'
-        }
-      });
+      call(_xE(1));
     };
 
     xhr.ontimeout = function () {
-      call({
-        success: false,
-        error: {
-          code: 2,
-          message: 'request timed out'
-        }
-      });
+      call(_xE(2));
     };
 
     xhr.send(data);
-  };
-
-  var xhr = function xhr(url) {
-    var op = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-    var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  },
+      xhr = function xhr(url, op, data) {
     return new Promise(function (_) {
       XHR(url, _, op, data);
     });
-  };
-
-  var pram = function pram(a) {
+  },
+      _ne = encodeURIComponent,
+      _nf = decodeURIComponent,
+      pram = function pram(a) {
     if (_typeof(a) == 'object') return Object.keys(a).map(function (b) {
-      return b + '=' + encodeURIComponent(a[b].toString());
+      return _ne(b) + '=' + _ne(a[b]);
     }).join('&');
     var b = {},
         c = /(?:(?:\?|&)?([^=&?#]*)=([^=&?#]*))/g,
         d;
 
     while (d = c.exec(a)) {
-      if (!b[d[1]]) b[d[1]] = decodeURIComponent(d[2]);else {
+      if (!b[d[1] = _nf(d[1])]) b[d[1]] = _nf(d[2]);else {
         if (!(b[d[1]] instanceof Array)) b[d[1]] = [b[d[1]]];
-        b[d[1]].push(decodeURIComponent(d[2]));
+        b[d[1]].push(_nf(d[2]));
       }
     }
 
     return b;
-  };
-
-  var _nb = function _nb(a, b) {
+  },
+      _nb = function _nb(a, b) {
     return b ? a instanceof icApp ? a : new icApp(a) : a instanceof icApp ? a.v : a;
   },
       _nc = function _nc(a) {
@@ -177,8 +156,7 @@
     function icApp(v, cr) {
       _classCallCheck(this, icApp);
 
-      this.v = cr ? icApp.ce(v, typeof cr == 'string' || _typeof(cr) == 'object' ? cr : {}) : typeof v == 'string' ? icApp.qs(v) : v;
-      return v == null || v == undefined ? v : this;
+      this.v = cr ? icApp.ce(v, typeof cr == 'string' || _typeof(cr) == 'object' ? cr : undefined) : typeof v == 'string' ? icApp.qs(v) : v;
     }
 
     _createClass(icApp, [{
@@ -214,7 +192,7 @@
       value: function chr(v) {
         if (v) {
           _nc(v).forEach(function (a) {
-            return _nb(a, 1).rem();
+            _nb(a, 1).rem();
           });
         } else {
           while (this.ch.length > 0) {
@@ -269,10 +247,10 @@
     }, {
       key: "txt",
       get: function get() {
-        return this.v.innerText;
+        return this.v.textContent;
       },
       set: function set(v) {
-        this.v.innerText = v;
+        this.v.textContent = v;
       }
     }, {
       key: "html",
@@ -354,6 +332,16 @@
       get: function get() {
         return new icApp(this.v.nextSibling);
       }
+    }, {
+      key: "qs",
+      value: function qs(v) {
+        return new icApp(icApp.qs(v, this.v));
+      }
+    }, {
+      key: "ds",
+      value: function ds(a) {
+        return new icApp(icApp.qs(_nd(a), this.v));
+      }
     }], [{
       key: "d",
       get: function get() {
@@ -371,12 +359,9 @@
       }
     }, {
       key: "ce",
-      value: function ce(v) {
-        var d = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-        var i = 0;
-        if ([['#cdata-section', 'createCDATASection'], ['#comment', 'createComment'], ['#document-fragment', 'createDocumentFragment'], ['#text', 'createTextNode']].some(function (a) {
-          return a[0] == v && [i = a[1]];
-        })) return this.d[i](d);else return this.d.createElement(v, d);
+      value: function ce(v, d) {
+        var i = v && ['createTextNode', 'createDocumentFragment', 'createComment'][['#text', '#document-fragment', '#comment'].indexOf(v)];
+        return i ? this.d[i](d) : this.d.createElement(v, d);
       }
     }, {
       key: "cen",
@@ -406,27 +391,28 @@
       return [b, a[b]];
     });
   },
-      _Nd = function _Nd(a) {
-    return a instanceof Array ? a : [a];
-  },
+      _Nd = _nc,
       _Ne = function _Ne(a) {
     return a === 0 || a === false;
-  };
-
-  var _elm = function _elm(a) {
+  },
+      _Nf = function _Nf(a) {
+    return new icApp(a.t, a.t[0] == '#' && a.txt || 1);
+  },
+      _elm = function _elm(a) {
     if (typeof a.d == 'string') a.d = {
       t: '#text',
-      _txt: a.d,
-      nodes: 1,
-      e: {
-        data: a.d
-      }
+      txt: a.d
     };
-    if (a.cr) a.cr.ap(a.e = new icApp(a.d.t, a.d.t.startsWith('#') ? a.d._txt : {}));
+
+    if (a.cr) {
+      a.cr.ap(a.e = _Nf(a.d));
+      if (a.d.cg) a.d.cg(a.e);
+    }
 
     if (_Na(a.d.t) && a.e.node.toUpperCase() != a.d.t.toUpperCase()) {
-      a.e.p.v.replaceChild((a.t = new icApp(a.d.t, a.d.t.startsWith('#') ? a.d._txt : {})).v, a.e.v);
+      a.e.p.v.replaceChild((a.t = _Nf(a.d)).v, a.e.v);
       a.e = a.t;
+      if (a.d.cg) a.d.cg(a.e);
     }
 
     if (a.d.s) _Nb(a.d.s, function (b) {
@@ -442,15 +428,7 @@
     });
 
     if (a.d.cl) {
-      a.t = [];
-
-      _Nd(a.d.cl).forEach(function (b) {
-        b.toString().split(' ').forEach(function (b) {
-          a.t.push(b);
-        });
-      });
-
-      if (!a.e.clc(a.t)) a.e.cla(a.t);
+      if (!a.e.clc(a.t = _Nd(a.d.cl).join(' ').split(' '))) a.e.cla(a.t);
       a.e.cl.forEach(function (b) {
         a.t.indexOf(b) == -1 && a.e.clr(b);
       });
@@ -479,7 +457,7 @@
       }
     }
 
-    if (_Na(a.d.id)) a.e.id = a.d.id;
+    if (_Na(a.d.id)) a.e.v.id = a.d.id;
     return a;
   };
 
@@ -490,24 +468,21 @@
       this._elm = _elm.bind(this);
       this.e = null;
       this._a = false;
-      this.pevData = null;
     }
 
     _createClass(icAppRender, [{
       key: "update",
       value: function update(d) {
-        if (this.data) {
-          this.pevData = Object.assign({}, this.data);
-          Object.assign(this.data, d);
-        }
+        if (this.data) this.pevData = Object.assign({}, this.data);else if (d) this.data = {};
+        if (d) Object.assign(this.data, d);
 
-        if (this.render && !(this.willUpdate && _Ne(this.willUpdate()))) {
+        if (this.e && this.render && !(this.willUpdate && _Ne(this.willUpdate()))) {
           var b = this.render();
 
           this._elm({
             e: this.e,
             d: {
-              ch: typeof b.length == 'undefined' ? [b] : b
+              ch: _Nd(b)
             }
           });
 
