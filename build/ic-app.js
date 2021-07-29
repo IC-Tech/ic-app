@@ -1,5 +1,5 @@
 /*!
- * ic-app v1.2.2
+ * ic-app v1.2.4
  * https://github.com/IC-Tech/ic-app#readme
  * Copyright (c) 2021, Imesh Chamara. All rights reserved.
  * Released under the MIT License
@@ -288,11 +288,6 @@ var icApp = /*#__PURE__*/function () {
   }, {
     key: "tag",
     get: function get() {
-      return this.v.tagName;
-    }
-  }, {
-    key: "node",
-    get: function get() {
       return this.v.nodeName;
     }
   }, {
@@ -406,7 +401,7 @@ var _Na = function _Na(a) {
     if (a.d.cg) a.d.cg(a.e);
   }
 
-  if (_Na(a.d.t) && a.e.node.toUpperCase() != a.d.t.toUpperCase()) {
+  if (_Na(a.d.t) && a.e.tag.toUpperCase() != a.d.t.toUpperCase()) {
     a.e.p.v.replaceChild((a.t = _Nf(a.d)).v, a.e.v);
     a.e = a.t;
     if (a.d.cg) a.d.cg(a.e);
@@ -438,20 +433,25 @@ var _Na = function _Na(a) {
   });
 
   if (!a.d.noupdate && a.d.ch) {
-    a.t = a.e[a.d.nodes || a.e.chn.length != a.e.ch.length ? 'chn' : 'ch'];
+    var b = a.d.nodes || a.e.chn.length != a.e.ch.length,
+        d = Array.from(a.e[b ? 'chn' : 'ch']).map(function (a) {
+      return new icApp(a);
+    });
+    if (b && !a.d.nodes) d = d.filter(function (a) {
+      return '#text' != a.tag && '#comment' != a.tag ? 1 : a.rem() && 0;
+    });
     a.d.ch.forEach(function (b, c) {
-      if (_Na(b)) _elm(a.t[c] ? {
-        e: new icApp(a.t[c]),
+      if (_Na(b)) _elm(d[c] ? {
+        e: d[c],
         d: b
       } : {
         cr: a.e,
         d: b
       });
     });
-
-    while (a.d.ch.length < a.t.length) {
-      a.t[a.t.length - 1].remove();
-    }
+    d.slice(a.d.ch.length).forEach(function (a) {
+      a.rem();
+    });
   }
 
   if (_Na(a.d.id)) a.e.v.id = a.d.id;

@@ -63,8 +63,7 @@ class icApp {
 	sa(n,v) { this.v.setAttribute(n,v); return this }
 	ae(n,f) { this.v.addEventListener(n,f); return this }
 	get p() { return new icApp(this.v.parentElement) }
-	get tag() {return this.v.tagName }
-	get node() {return this.v.nodeName }
+	get tag() {return this.v.nodeName }
 	get val() { return this.v.value }
 	set val(v) { this.v.value = v }
 	rem() { this.v.remove(); return this }
@@ -92,7 +91,7 @@ _Nf = a => new icApp(a.t, a.t[0] == '#' && a.txt || 1),
 _elm = a => {
 	if(typeof a.d == 'string') a.d = {t:'#text', txt: a.d}
 	if(a.cr) { a.cr.ap(a.e = _Nf(a.d)); if(a.d.cg) a.d.cg(a.e) }
-	if(_Na(a.d.t) && a.e.node.toUpperCase() != a.d.t.toUpperCase()) { a.e.p.v.replaceChild((a.t = _Nf(a.d)).v, a.e.v); a.e = a.t; if(a.d.cg) a.d.cg(a.e) }
+	if(_Na(a.d.t) && a.e.tag.toUpperCase() != a.d.t.toUpperCase()) { a.e.p.v.replaceChild((a.t = _Nf(a.d)).v, a.e.v); a.e = a.t; if(a.d.cg) a.d.cg(a.e) }
 	if(a.d.s) _Nb(a.d.s, b => {if(a.d.s[b] != a.e.st[b]) a.e.st[b] = a.d.s[b]})
 	if(a.d.at) _Nc(a.d.at).forEach(b => {b[1] === undefined ? a.e.ra(b[0]) : (_Na(b[1]) ? (a.e.ga(b[0]) != b[1].toString() ? a.e.sa(...b) : 0) : 0)})
 	if(a.d.d) _Nc(a.d.d).forEach(b => {if(b[1].toString() != a.e.d[b[0]]) a.e.d[b[0]] = b[1].toString()})
@@ -103,7 +102,12 @@ _elm = a => {
 	if(_Na(a.d.html) && a.e.html != a.d.html) a.e.html = a.d.html
 	if(_Na(a.d.txt) && a.e.txt != a.d.txt) a.e.txt = a.d.txt
 	if(a.d.e) _Nc(a.d.e).forEach(b => {if(a.e.v[b[0]] != b[1]) a.e.v[b[0]] = b[1]})
-	if(!a.d.noupdate && a.d.ch) { a.t = a.e[a.d.nodes || a.e.chn.length != a.e.ch.length ? 'chn' : 'ch']; a.d.ch.forEach((b,c) => {if(_Na(b)) _elm(a.t[c] ? {e: new icApp(a.t[c]), d: b} : {cr: a.e, d: b})}); while(a.d.ch.length < a.t.length) a.t[a.t.length - 1].remove() }
+	if(!a.d.noupdate && a.d.ch) {
+		var b = a.d.nodes || a.e.chn.length != a.e.ch.length, d = Array.from(a.e[b ? 'chn' : 'ch']).map(a => new icApp(a))
+		if(b && !a.d.nodes) d = d.filter(a => '#text' != a.tag && '#comment' != a.tag ? 1 : (a.rem() && 0))
+		a.d.ch.forEach((b,c) => { if(_Na(b)) _elm(d[c] ? {e: d[c], d: b} : {cr: a.e, d: b}) });
+		d.slice(a.d.ch.length).forEach(a => {a.rem()})
+	}
 	if(_Na(a.d.id)) a.e.v.id = a.d.id
 	return a
 }
